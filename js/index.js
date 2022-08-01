@@ -1,6 +1,5 @@
 
 // ADD time?
-// increase speed over time/food
 
 var snakeTable = document.querySelector(".snakeTable");
 var boxes = document.getElementsByClassName("box");
@@ -15,7 +14,8 @@ var table = {
 var snake = {
   direction: "right",
   position: [[6,10], [7,10], [8,10], [9,10], [10,10]],
-  speed: 200,
+  interval: 200,
+  food: 0,
   score: 0,
   final: 0,
   time: 0,
@@ -23,7 +23,8 @@ var snake = {
   init: function() {
     snake.direction = "right";
     snake.position = [[6,10], [7,10], [8,10], [9,10], [10,10]];
-    snake.speed = 200;
+    snake.interval = 200;
+    snake.food = 0;
     snake.score = 0;
     snake.time = 0;
     snake.canTurn = 0;
@@ -46,14 +47,14 @@ document.addEventListener("keydown", function(e) {
 // start game
 function startSnake() {
   modul.classList.add("hidden");
-  clearInterval(checkPageInterval);
+  // clearInterval(checkPageInterval);
   snake.time = 1;
   renderSnake();
   randomFood();
   // interval, heart of the game
   setInt = setInterval(function() {
     move();
-  }, snake.speed);
+  }, snake.interval);
 }
 
 // end of game
@@ -63,7 +64,7 @@ function stopp() {
   start.querySelector("span").innerHTML = snake.final + " Points !";
   setTimeout(function() {
     start.querySelector("span").innerHTML = "Play Snake";
-  }, 800);
+  }, 1500);
   snake.init();
   modul.classList.remove("hidden");
 }
@@ -134,8 +135,15 @@ function hitFood() {
     boxes[random].classList.remove("food");
     snake.position.unshift(tail);
     randomFood();
-    snake.score += 10;
+    snake.food++;
+    snake.score += snake.food;
     scoreElt.innerHTML = snake.score + " pts";
+    // increase speed
+    clearInterval(setInt);
+    snake.interval = snake.interval - snake.interval/40;
+    setInt = setInterval(function() {
+      move();
+    }, snake.interval);
   }
 }
 
@@ -212,15 +220,15 @@ function tableCreation() {
 }
 
 // handle focus of the page
-function checkPageFocus() {
-  if (document.hasFocus()) {
-    modul.classList.remove("hidden");
-  }
-  else {
-    modul.classList.add("hidden");
-  }
-}
-var checkPageInterval = setInterval(checkPageFocus, 300);
+// function checkPageFocus() {
+//   if (document.hasFocus()) {
+//     modul.classList.remove("hidden");
+//   }
+//   else {
+//     modul.classList.add("hidden");
+//   }
+// }
+// var checkPageInterval = setInterval(checkPageFocus, 300);
 
 // swipe Showcase
 $("document").ready(function() {
