@@ -44,6 +44,26 @@ document.addEventListener("keydown", function(e) {
   }
 });
 
+var alanBtnInstance = alanBtn({
+  key: "d9f0b1e8336931bf597029ff6c5cc7242e956eca572e1d8b807a3e2338fdd0dc/stage",
+  onCommand: function (commandData) {
+  if (commandData.command == "go-left") {
+    goLeft()
+  } 
+  if (commandData.command == "go-up") {
+    goUp()
+  } 
+  if (commandData.command == "go-right") {
+    goRight()
+  } 
+  if (commandData.command == "go-down") {
+    goDown()
+  } 
+
+  },
+    rootEl: document.getElementById("alan-btn"),
+  });
+
 // start game
 function startSnake() {
   modul.classList.add("hidden");
@@ -56,6 +76,7 @@ function startSnake() {
     move();
   }, snake.interval);
 }
+
 
 // end of game
 function stopp() {
@@ -169,6 +190,30 @@ function renderSnake() {
   }
 }
 
+
+function goLeft() {
+  if (snake.direction === "right") return;
+        snake.direction = "left";
+  updatePositions();
+}
+
+function goUp() {
+  if (snake.direction === "down") return;
+  snake.direction = "up";
+  updatePositions();
+}
+
+function goRight() {
+  if (snake.direction === "left") return;
+  snake.direction = "right";
+  updatePositions();
+}
+
+function goDown() {
+  if (snake.direction === "up") return;
+  snake.direction = "down";
+  updatePositions();
+}
 // keypress handling to turn
 function turn(e) {
   if (snake.canTurn) {
@@ -177,20 +222,16 @@ function turn(e) {
         // document.removeEventListener()
         break;
       case 37:// left
-        if (snake.direction === "right") return;
-        snake.direction = "left";
+        goLeft();
         break;
       case 38:// up
-        if (snake.direction === "down") return;
-        snake.direction = "up";
+        goUp();
         break;
       case 39:// right
-        if (snake.direction === "left") return;
-        snake.direction = "right";
+        goRight();
         break;
       case 40:// down
-        if (snake.direction === "up") return;
-        snake.direction = "down";
+        goDown();
         break;
       default:
         console.log("wrong key");
